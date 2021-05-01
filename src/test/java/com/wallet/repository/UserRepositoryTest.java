@@ -6,9 +6,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Optional;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,6 +20,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.wallet.entity.User;
 
 @RunWith(SpringRunner.class)
+@TestInstance(Lifecycle.PER_CLASS)
 @SpringBootTest
 @ActiveProfiles("test")
 public class UserRepositoryTest {
@@ -27,7 +30,7 @@ public class UserRepositoryTest {
 	@Autowired
 	UserRepository repository;
 	
-	@Before
+	@BeforeAll
 	public void setUp() {
 		User u = new User();
 		u.setName("Set up User");
@@ -37,7 +40,7 @@ public class UserRepositoryTest {
 		repository.save(u);
 	}
 	
-	@After
+	@AfterAll
 	public void tearDown() {
 		repository.deleteAll();
 	}
@@ -54,6 +57,7 @@ public class UserRepositoryTest {
 		assertNotNull(response);
 	}
 	
+	@Test
 	public void testFindByEmail() {
 		Optional<User> response = repository.findByEmailEquals(EMAIL);
 		
