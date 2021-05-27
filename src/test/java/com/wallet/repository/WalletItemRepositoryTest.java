@@ -13,6 +13,7 @@ import java.util.Optional;
 
 import javax.validation.ConstraintViolationException;
 
+import org.apache.catalina.filters.ExpiresFilter.XHttpServletResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -181,5 +182,17 @@ public class WalletItemRepositoryTest {
 		
 		assertEquals(1, response.size());
 		assertEquals(TypeEnum.SD, response.get(0).getType());
+	}
+	
+	@Test
+	@Order(8)
+	public void testSumByWallet() {
+		Optional<Wallet> w = walletRepository.findById(savedWalletId);
+		
+		repository.save(new WalletItem(null, w.get(), DATE, TYPE, DESCRIPTION, BigDecimal.valueOf(150.80)));
+		
+		BigDecimal response = repository.sumByWalletId(savedWalletId);
+		
+		assertEquals(0, response.compareTo(BigDecimal.valueOf(215.8)));
 	}
 }
