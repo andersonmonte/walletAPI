@@ -10,6 +10,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
@@ -30,6 +32,7 @@ import com.wallet.util.enums.TypeEnum;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
+@TestMethodOrder(OrderAnnotation.class)
 public class WalletItemServiceTest {
 
 	@MockBean
@@ -69,6 +72,32 @@ public class WalletItemServiceTest {
 		assertNotNull(response);
 		assertEquals(1, response.getContent().size());
 		assertEquals(DESCRIPTION, response.getContent().get(0).getDescription());
+	}
+	
+	@Test
+	@Order(3)
+	public void testFindByType() {
+		List<WalletItem> list = new ArrayList<>();
+		list.add(getMockWalletItem());
+		
+		BDDMockito.given(repository.findByWalletIdAndType(Mockito.anyLong(), Mockito.any(TypeEnum.class))).willReturn(list);
+		
+		List<WalletItem> response = service.findByWalletAndType(1L, TypeEnum.EN);
+		
+		assertNotNull(response);
+		assertEquals(TYPE, response.get(0).getType());
+	}
+	
+	@Test
+	@Order(4)
+	public void testSumByWallet() {
+		BigDecimal value = BigDecimal.valueOf(45);
+		
+		BDDMockito.given(repository.sumByWalletId(Mockito.anyLong())).willReturn(value);
+		
+		BigDecimal response = service.sumByWalletId(1L);
+		
+		assertEquals(0, response.compareTo(value));
 	}
 	
 	private WalletItem getMockWalletItem() {

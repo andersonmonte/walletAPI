@@ -13,7 +13,6 @@ import java.util.Optional;
 
 import javax.validation.ConstraintViolationException;
 
-import org.apache.catalina.filters.ExpiresFilter.XHttpServletResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
