@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wallet.dto.WalletItemDTO;
+import com.wallet.entity.Wallet;
 import com.wallet.entity.WalletItem;
 import com.wallet.response.Response;
 import com.wallet.service.WalletItemService;
@@ -118,8 +119,46 @@ public class WalletItemController {
 		return ResponseEntity.ok().body(response);
 	}
 	
-	@DeleteMapping(value = "/{wallet}")
-	public ResponseEntity<Response<String>> delete(@PathVariable("wallet") Long wallet) {
+	@DeleteMapping(value = "/{walletItemId}")
+	public ResponseEntity<Response<String>> delete(@PathVariable("walletItemId") Long walletItemId) {
+		Response<String> response = new Response<String>();
 		
+		Optional<WalletItem> wi = service.findById(walletItemId);
+		
+		if (!wi.isPresent()) {
+			response.getErrors().add("WalletItem de id " + walletItemId + " não encontrada");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+		}
+		
+		service.deleteById(walletItemId);
+		response.setData("WalletItem de id " + walletItemId + " apagada com sucesso");
+		return ResponseEntity.ok().body(response);
+	}
+	
+	private WalletItem convertDtoToEntity(WalletItemDTO dto) {
+		WalletItem wi = new WalletItem();
+		wi.setDate(dto.getDate());
+		wi.setDescription(dto.getDescription());
+		wi.setId(dto.getId());
+		wi.setType(TypeEnum.getEnum(dto.getType()));
+		wi.setValue(dto.getValue());
+		
+		Wallet w = new Wallet();
+		w.setId(dto.getWallet());
+		wi.setWallet(w);
+		
+		return wi;
+	}
+	
+	private WalletItemDTO convertEntityToDto(WalletItem wi) {
+		WalletItemDTO dto = new WalletItemDTO();
+		dto.setDate(wi.getDate());
+		dto.setDescription(wi.getDescription());
+		dto.setId(wi.getId());
+		dto.setType(wi.getType().getValue());
+		dto.setValue(wi.getValue());
+		dto.setWallet(wi.getWallet().getId());
+		
+		return dto;
 	}
 }
