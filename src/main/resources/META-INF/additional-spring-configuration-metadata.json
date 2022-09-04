@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "jwt.expiration",
+    "type": "java.lang.Integer",
+    "description": "Tempo definido para o token JWT expirar (em segundos)."
+  },
+  {
+    "name": "jwt.secret",
+    "type": "java.lang.String",
+    "description": "Segredo usado como chave para gerar tokens JWT."
+  },
+  {
+    "name": "pagination.items_per_page",
+    "type": "java.lang.Integer",
+    "description": "Quantidade de itens por página a serem retornados."
+  }
+]}
