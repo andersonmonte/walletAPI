@@ -1,3 +1,4 @@
+-- initial script
 create table users(
 id serial,
 name varchar(50),
