@@ -1,0 +1,1 @@
+[![Build Status](https://app.travis-ci.com/github/andersonmonte/walletAPI.svg?branch=master)](https://app.travis-ci.com/github/andersonmonte/walletAPI)
